@@ -1,41 +1,25 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using CarvedRock.WebApp;
-// using NLog;
-// using NLog.Web;
 using Serilog;
 using Serilog.Exceptions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog.Enrichers.Span;
-using System.Diagnostics;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Resources;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
-//builder.Logging.AddJsonConsole();
-//builder.Services.AddApplicationInsightsTelemetry();
 
-builder.Host.UseSerilog((context, loggerConfig) => {
+builder.Host.UseSerilog((context, loggerConfig) => { 
     loggerConfig
     .ReadFrom.Configuration(context.Configuration)
     .WriteTo.Console()
+    .WriteTo.Debug()
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .Enrich.With<ActivityEnricher>()
     .WriteTo.Seq("http://localhost:5341");
 });
-
-builder.Services.AddOpenTelemetryTracing(b => {
-        b.SetResourceBuilder(
-            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName)) 
-         .AddAspNetCoreInstrumentation()
-         .AddHttpClientInstrumentation()         
-         .AddOtlpExporter(opts => { opts.Endpoint = new Uri("http://localhost:4317"); });
-});
-
-//NLog.LogManager.Setup().LoadConfigurationFromFile();
-//builder.Host.UseNLog();
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddAuthentication(options =>
@@ -72,10 +56,6 @@ builder.Services.AddHttpClient();
 var app = builder.Build();
 
 app.UseExceptionHandler("/Error");
-
-// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//app.UseHsts();
-//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

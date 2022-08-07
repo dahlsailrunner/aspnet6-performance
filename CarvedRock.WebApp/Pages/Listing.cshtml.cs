@@ -55,7 +55,8 @@ namespace CarvedRock.WebApp.Pages
                 var traceId = details.Extensions["traceId"]?.ToString();
 
                 LogApiFailure(fullPath, (int) response.StatusCode, traceId ?? "");
-               
+                // the above call is a more performant / efficient way of doing
+                //                 what is commented out below
                 //_logger.LogWarning(
                 //    "API failure: {fullPath} Response: {apiResponse}, Trace: {trace}, User: {user}",
                 //  fullPath, (int) response.StatusCode, traceId, userName);        
