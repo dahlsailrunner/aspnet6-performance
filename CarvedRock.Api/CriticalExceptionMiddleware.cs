@@ -18,11 +18,11 @@ public class CriticalExceptionMiddleware
         {
             await _next(context);
         }
-        catch (SqliteException sqlex)
+        catch (SqliteException sqlException)
         {
-            if (sqlex.SqliteErrorCode == 551)
+            if (sqlException.SqliteErrorCode == 551)
             {
-                _logger.LogCritical(sqlex, "Fatal error occurred in database!!");
+                _logger.LogCritical(sqlException, "Fatal error occurred in database!!");
             }            
         }       
     }

@@ -11,10 +11,7 @@ public partial class ProductController : ControllerBase
     private readonly ILogger<ProductController> _logger;
     private readonly IProductLogic _productLogic;   
 
-    [LoggerMessage(CarvedRockEvents.GettingProducts, LogLevel.Information, 
-        "SourceGenerated - Getting products in API.")]
-    partial void LogGettingProducts(); 
-
+    
     public ProductController(ILogger<ProductController> logger, IProductLogic productLogic)
     {
         _logger = logger;
@@ -26,12 +23,9 @@ public partial class ProductController : ControllerBase
     {
         using (_logger.BeginScope("ScopeCat: {ScopeCat}", category))
         {     
-            LogGettingProducts();       
-            //_logger.LogInformation(CarvedRockEvents.GettingProducts, "Getting products in API.");
+            _logger.LogInformation( "Getting products in API.");
             return await _productLogic.GetProductsForCategoryAsync(category);
         }
-        
-        //return _productLogic.GetProductsForCategory(category);
     }
 
     [HttpGet("{id:int}")]
@@ -39,9 +33,9 @@ public partial class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(int id)
     {
-        //var product = await _productLogic.GetProductByIdAsync(id);
         _logger.LogDebug("Getting single product in API for {id}", id);
-        var product = _productLogic.GetProductById(id);
+        //var product = _productLogic.GetProductById(id);
+        var product = await _productLogic.GetProductByIdAsync(id);
         if (product != null)
         {
             return Ok(product);

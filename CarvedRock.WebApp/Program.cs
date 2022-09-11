@@ -6,19 +6,17 @@ using Serilog.Exceptions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog.Enrichers.Span;
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 
 builder.Host.UseSerilog((context, loggerConfig) => { 
     loggerConfig
     .ReadFrom.Configuration(context.Configuration)
-    .WriteTo.Console()
-    .WriteTo.Debug()
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .Enrich.With<ActivityEnricher>()
-    .WriteTo.Seq("http://localhost:5341");
+    .WriteTo.Console()
+    .WriteTo.Debug();
 });
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -63,7 +61,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseMiddleware<UserScopeMiddleware>();
 app.UseAuthorization();
-
 app.MapRazorPages().RequireAuthorization();
 app.MapHealthChecks("health").AllowAnonymous();
 

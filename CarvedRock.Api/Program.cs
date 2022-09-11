@@ -19,12 +19,11 @@ builder.Logging.ClearProviders();
 builder.Host.UseSerilog((context, loggerConfig) => {
     loggerConfig
     .ReadFrom.Configuration(context.Configuration)
-    .WriteTo.Console()
-    .WriteTo.Debug()
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .Enrich.With<ActivityEnricher>()
-    .WriteTo.Seq("http://localhost:5341");
+    .WriteTo.Console()
+    .WriteTo.Debug();
 });
 
 builder.Services.AddProblemDetails(opts => 
