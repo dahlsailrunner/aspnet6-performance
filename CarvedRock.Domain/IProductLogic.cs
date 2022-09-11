@@ -1,11 +1,11 @@
-using CarvedRock.Data.Entities;
+using CarvedRock.Core;
 
 namespace CarvedRock.Domain;
 
 public interface IProductLogic 
 {
-    Task<IEnumerable<Product>> GetProductsForCategoryAsync(string category);
-    Task<Product?> GetProductByIdAsync(int id);
-    IEnumerable<Product> GetProductsForCategory(string category);
-    Product? GetProductById(int id);
+    Task<IEnumerable<ProductModel>> GetProductsForCategoryAsync(string category);
+    Task<ProductModel?> GetProductByIdAsync(int id);
+    IEnumerable<ProductModel> GetProductsForCategory(string category);
+    ProductModel? GetProductById(int id);
 }

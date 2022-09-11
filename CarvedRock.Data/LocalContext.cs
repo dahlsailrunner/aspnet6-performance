@@ -6,6 +6,7 @@ namespace CarvedRock.Data
     public class LocalContext : DbContext
     {
         public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<ProductRating> ProductRatings { get; set; } = null!;
 
         public string DbPath { get; set; }
 
@@ -16,7 +17,8 @@ namespace CarvedRock.Data
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
+            => options
+                .UseSqlite($"Data Source={DbPath}");
 
         public void MigrateAndCreateData()
         {
@@ -34,7 +36,8 @@ namespace CarvedRock.Data
                 Category = "boots",
                 Price = 69.99,
                 Description = "Great support in this high-top to take you to great heights and trails.",
-                ImgUrl = "https://www.pluralsight.com/content/dam/pluralsight2/teach/author-tools/carved-rock-fitness/img-brownboots.jpg"
+                ImgUrl = "https://www.pluralsight.com/content/dam/pluralsight2/teach/author-tools/carved-rock-fitness/img-brownboots.jpg",
+                Rating = new ProductRating { AggregateRating = 4.2M, NumberOfRatings = 20 }
             });
             Products.Add(new Product
             {
@@ -43,7 +46,8 @@ namespace CarvedRock.Data
                 Price = 49.99,
                 Description =
                     "Easy in and out with this lightweight but rugged shoe with great ventilation to get your around shores, beaches, and boats.",
-                ImgUrl = "https://www.pluralsight.com/content/dam/pluralsight2/teach/author-tools/carved-rock-fitness/img-greyboots.jpg"
+                ImgUrl = "https://www.pluralsight.com/content/dam/pluralsight2/teach/author-tools/carved-rock-fitness/img-greyboots.jpg",
+                Rating = new ProductRating { AggregateRating = 4.6M, NumberOfRatings = 104 }
             });
             Products.Add(new Product
             {
@@ -52,7 +56,8 @@ namespace CarvedRock.Data
                 Price = 64.99,
                 Description =
                     "All the insulation and support you need when wandering the rugged trails of the woods and backcountry.",
-                ImgUrl = "/images/shutterstock_222721876.jpg"
+                ImgUrl = "/images/shutterstock_222721876.jpg",
+                Rating = new ProductRating { AggregateRating = 3.7M, NumberOfRatings = 68 }
             });
             Products.Add(new Product
             {

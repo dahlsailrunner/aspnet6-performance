@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Net.Http.Headers;
-using CarvedRock.WebApp.Models;
+using CarvedRock.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,7 +23,7 @@ public partial class ListingModel : PageModel
         _httpCtx = httpContextAccessor.HttpContext;
     }
 
-    public List<Product>? Products { get; set; }
+    public List<ProductModel>? Products { get; set; }
     public string CategoryName { get; set; } = "";
 
     public async Task OnGetAsync()
@@ -48,7 +48,7 @@ public partial class ListingModel : PageModel
         if (response.IsSuccessStatusCode)
         {
             var jsonContent = await response.Content.ReadAsStringAsync();
-            Products = JsonConvert.DeserializeObject<List<Product>>(jsonContent); // Newtonsoft.Json
+            Products = JsonConvert.DeserializeObject<List<ProductModel>>(jsonContent); // Newtonsoft.Json
 
             if (Products != null && Products.Any())
             {

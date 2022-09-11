@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using CarvedRock.Core;
 using CarvedRock.Data;
 using CarvedRock.Data.Entities;
 using Microsoft.Extensions.Logging;
@@ -14,30 +15,70 @@ public class ProductLogic : IProductLogic
         _logger = logger;
         _repo = repo;
     }
-    public async Task<IEnumerable<Product>> GetProductsForCategoryAsync(string category)
+    public async Task<IEnumerable<ProductModel>> GetProductsForCategoryAsync(string category)
     {               
         _logger.LogInformation("Getting products in logic for {category}", category);
 
         Activity.Current?.AddEvent(new ActivityEvent("Getting products from repository"));
-        var results = await _repo.GetProductsAsync(category);
+        var products = await _repo.GetProductsAsync(category);
+
+        var results = new List<ProductModel>();
+        foreach (var product in products)
+        {
+            var productToAdd = ConvertToProductModel(product);
+            results.Add(productToAdd);
+        }
+
         Activity.Current?.AddEvent(new ActivityEvent("Retrieved products from repository"));
 
         return results;
     }
 
-    public async Task<Product?> GetProductByIdAsync(int id)
+    public async Task<ProductModel?> GetProductByIdAsync(int id)
     {
-        return await _repo.GetProductByIdAsync(id);
+        var product = await _repo.GetProductByIdAsync(id);
+        return product != null ? ConvertToProductModel(product) : null;
     }
 
-    public IEnumerable<Product> GetProductsForCategory(string category)
+    public IEnumerable<ProductModel> GetProductsForCategory(string category)
     {
-        return _repo.GetProducts(category);
+        var products =  _repo.GetProducts(category);
+
+        var results = new List<ProductModel>();
+        foreach (var product in products)
+        {
+            var productToAdd = ConvertToProductModel(product);
+            results.Add(productToAdd);
+        }
+
+        return results;
     }
 
-    public Product? GetProductById(int id)
+    public ProductModel? GetProductById(int id)
     {
-        _logger.LogDebug("Logic for single product ({id})", id);
-        return _repo.GetProductById(id);
+        var product = _repo.GetProductById(id);
+        return product != null ? ConvertToProductModel(product) : null;
     }
+
+    private static ProductModel ConvertToProductModel(Product product)
+    {
+        var productToAdd = new ProductModel
+        {
+            Id = product.Id,
+            Category = product.Category,
+            Description = product.Description,
+            ImgUrl = product.ImgUrl,
+            Name = product.Name
+        };
+        var rating = product.Rating;
+        if (rating != null)
+        {
+            productToAdd.Rating = rating.AggregateRating;
+            productToAdd.NumberOfRatings = rating.NumberOfRatings;
+        }
+
+        return productToAdd;
+    }
+
+    
 }

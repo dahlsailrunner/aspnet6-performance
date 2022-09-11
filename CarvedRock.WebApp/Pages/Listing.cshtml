@@ -9,6 +9,7 @@
     <tr>
         <th>Name</th>
         <th class="d-flex justify-content-center">Description</th>
+        <th>Rating</th>
         <th>Price</th>
     </tr>
     </thead>
@@ -23,6 +24,7 @@
             <td>
                 @Html.DisplayFor(modelItem => product.Description)
             </td>
+            <td>@product.Rating (@product.NumberOfRatings)</td>
             <td>
                 @Html.DisplayFor(modelItem => product.Price)               
             </td>

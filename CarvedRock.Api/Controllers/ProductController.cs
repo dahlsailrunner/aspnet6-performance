@@ -1,4 +1,4 @@
-using CarvedRock.Data.Entities;
+using CarvedRock.Core;
 using CarvedRock.Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,7 @@ public partial class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Product>> Get(string category = "all")
+    public async Task<IEnumerable<ProductModel>> Get(string category = "all")
     {
         using (_logger.BeginScope("ScopeCat: {ScopeCat}", category))
         {     
@@ -29,7 +29,7 @@ public partial class ProductController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProductModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(int id)
     {

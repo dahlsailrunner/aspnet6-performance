@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CarvedRock.Core\CarvedRock.Core.csproj" />
     <ProjectReference Include="..\CarvedRock.Data\CarvedRock.Data.csproj" />
   </ItemGroup>
 </Project>
