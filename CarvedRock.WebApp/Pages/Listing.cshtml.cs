@@ -23,7 +23,7 @@ public partial class ListingModel : PageModel
         _httpCtx = httpContextAccessor.HttpContext;
     }
 
-    public List<Product>? Products { get; set; } = new List<Product>();
+    public List<Product>? Products { get; set; }
     public string CategoryName { get; set; } = "";
 
     public async Task OnGetAsync()
@@ -50,13 +50,6 @@ public partial class ListingModel : PageModel
             var jsonContent = await response.Content.ReadAsStringAsync();
             Products = JsonConvert.DeserializeObject<List<Product>>(jsonContent); // Newtonsoft.Json
 
-            //Products = JsonSerializer.Deserialize<List<Product>>(jsonContent, 
-            //    new JsonSerializerOptions(defaults:JsonSerializerDefaults.Web));  System.Text.Json
-
-            //Products = await response.Content.ReadFromJsonAsync<List<Product>>(); // System.Text.Json helper
-
-            // System.Text.Json with SourceGeneration
-            //Products = JsonSerializer.Deserialize(jsonContent, SourceGenerationContext.Default.ListProduct); 
             if (Products != null && Products.Any())
             {
                 CategoryName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Products.First().Category);
