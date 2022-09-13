@@ -35,7 +35,8 @@ namespace CarvedRock.Data
 
             try
             {
-                return await _ctx.Products.Where(p => p.Category == category || category == "all").ToListAsync();
+                return await _ctx.Products.Where(p => p.Category == category || category == "all")
+                    .Include(p=> p.Rating).ToListAsync();
             } 
             catch (Exception ex)
             {

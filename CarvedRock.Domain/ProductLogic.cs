@@ -68,7 +68,8 @@ public class ProductLogic : IProductLogic
             Category = product.Category,
             Description = product.Description,
             ImgUrl = product.ImgUrl,
-            Name = product.Name
+            Name = product.Name,
+            Price = product.Price
         };
         var rating = product.Rating;
         if (rating != null)

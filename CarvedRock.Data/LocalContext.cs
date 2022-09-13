@@ -1,5 +1,6 @@
 ﻿using CarvedRock.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CarvedRock.Data
 {
@@ -18,7 +19,9 @@ namespace CarvedRock.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options
-                .UseSqlite($"Data Source={DbPath}");
+                .UseSqlite($"Data Source={DbPath}")
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                .LogTo(Console.WriteLine, LogLevel.Information);
 
         public void MigrateAndCreateData()
         {

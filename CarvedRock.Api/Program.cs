@@ -12,8 +12,6 @@ using Serilog.Enrichers.Span;
 using Serilog.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<LocalContext>();
 builder.Logging.ClearProviders();
 
 builder.Host.UseSerilog((context, loggerConfig) => {
@@ -89,7 +87,5 @@ app.UseAuthentication();
 app.UseMiddleware<UserScopeMiddleware>();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
-
-app.MapHealthChecks("health").AllowAnonymous();
 
 app.Run();

@@ -1,4 +1,6 @@
-﻿namespace CarvedRock.Core;
+﻿using System.Text.Json.Serialization;
+
+namespace CarvedRock.Core;
 
 public class ProductModel
 {
@@ -10,4 +12,10 @@ public class ProductModel
     public string ImgUrl { get; set; } = null!;
     public decimal Rating { get; set; }
     public int NumberOfRatings { get; set; }
+}
+
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(List<ProductModel>))]
+public partial class SourceGenerationContext : JsonSerializerContext
+{
 }

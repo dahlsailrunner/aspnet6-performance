@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using CarvedRock.WebApp;
 using Serilog;
 using Serilog.Exceptions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog.Enrichers.Span;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,8 +44,6 @@ builder.Services.AddAuthentication(options =>
     options.SaveTokens = true;
 });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHealthChecks()
-    .AddIdentityServer(new Uri("https://demo.duendesoftware.com"), failureStatus: HealthStatus.Degraded);
 
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
@@ -62,6 +59,5 @@ app.UseAuthentication();
 app.UseMiddleware<UserScopeMiddleware>();
 app.UseAuthorization();
 app.MapRazorPages().RequireAuthorization();
-app.MapHealthChecks("health").AllowAnonymous();
 
 app.Run();

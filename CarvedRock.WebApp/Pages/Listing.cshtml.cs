@@ -1,10 +1,12 @@
 using System.Globalization;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using CarvedRock.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CarvedRock.WebApp.Pages;
 
@@ -48,7 +50,13 @@ public partial class ListingModel : PageModel
         if (response.IsSuccessStatusCode)
         {
             var jsonContent = await response.Content.ReadAsStringAsync();
-            Products = JsonConvert.DeserializeObject<List<ProductModel>>(jsonContent); // Newtonsoft.Json
+            //Products = JsonConvert.DeserializeObject<List<ProductModel>>(jsonContent); // Newtonsoft.Json
+            //Products = JsonSerializer.Deserialize<List<ProductModel>>(jsonContent,
+            //    new JsonSerializerOptions(defaults:JsonSerializerDefaults.Web));  // System.Text.Json
+
+            //Products = await response.Content.ReadFromJsonAsync<List<ProductModel>>();  // System.Text.Json helper
+            Products = JsonSerializer.Deserialize(jsonContent, SourceGenerationContext.Default.ListProductModel);
+            
 
             if (Products != null && Products.Any())
             {
