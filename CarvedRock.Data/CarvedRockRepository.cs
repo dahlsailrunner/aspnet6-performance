@@ -35,6 +35,8 @@ namespace CarvedRock.Data
 
             try
             {
+
+                Thread.Sleep(5000);  // simulates heavy query
                 return await _ctx.Products.Where(p => p.Category == category || category == "all")
                     .Include(p=> p.Rating).ToListAsync();
             } 
