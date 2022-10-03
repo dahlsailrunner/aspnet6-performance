@@ -43,4 +43,36 @@ public partial class ProductController : ControllerBase
         _logger.LogWarning("No product found for ID: {id}", id);
         return NotFound();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Post()
+    {
+        var newProductModel = new ProductModel
+        {
+            Category = "boots",
+            Description = "These boots feel like they've been around forever - and they probably have!",
+            ImgUrl = "https://www.pluralsight.com/content/dam/pluralsight2/teach/author-tools/carved-rock-fitness/img-greyboots.jpg",
+            Name = "OLD AND TIRED",
+            Price = 99.99
+        };
+
+        var addedProduct = await _productLogic.AddNewProductAsync(newProductModel, false);
+        return Created($"{Request.Path}/{addedProduct.Id}", addedProduct);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put()
+    {
+        var newProductModel = new ProductModel
+        {
+            Category = "boots",
+            Description = "These boots are really the best thing since sliced bread!",
+            ImgUrl = "https://www.pluralsight.com/content/dam/pluralsight2/teach/author-tools/carved-rock-fitness/img-brownboots.jpg",
+            Name = "NEW AND IMPROVED",
+            Price = 99.99
+        };
+
+        var addedProduct = await _productLogic.AddNewProductAsync(newProductModel, true);
+        return Created($"{Request.Path}/{addedProduct.Id}", addedProduct);
+    }
 }

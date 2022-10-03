@@ -1,7 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Text;
+using System.Text.Json;
 using CarvedRock.Data.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace CarvedRock.Data
@@ -9,14 +13,18 @@ namespace CarvedRock.Data
     public class CarvedRockRepository :ICarvedRockRepository
     {
         private readonly LocalContext _ctx;
-        private readonly ILogger<CarvedRockRepository> _logger;        
+        private readonly ILogger<CarvedRockRepository> _logger;
+        private readonly IMemoryCache _memoryCache;
+        private readonly IDistributedCache _distCache;
         private readonly ILogger _factoryLogger;
 
         public CarvedRockRepository(LocalContext ctx, ILogger<CarvedRockRepository> logger,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory, IMemoryCache memoryCache, IDistributedCache distCache)
         {
             _ctx = ctx;
             _logger = logger;
+            _memoryCache = memoryCache;
+            _distCache = distCache;
             _factoryLogger = loggerFactory.CreateLogger("DataAccessLayer");
         }
         public async Task<List<Product>> GetProductsAsync(string category)
@@ -35,10 +43,41 @@ namespace CarvedRock.Data
 
             try
             {
+                var cacheKey = $"products_{category}";
+                //if (!_memoryCache.TryGetValue(cacheKey, out List<Product> results))
+                //{
+                //    Thread.Sleep(5000);  // simulates heavy query
+                //    results = await _ctx.Products
+                //        .Where(p => p.Category == category || category == "all")
+                //        .Include(p => p.Rating).ToListAsync();
 
-                Thread.Sleep(5000);  // simulates heavy query
-                return await _ctx.Products.Where(p => p.Category == category || category == "all")
-                    .Include(p=> p.Rating).ToListAsync();
+                //    _memoryCache.Set(cacheKey, results, TimeSpan.FromMinutes(2));
+                //}
+
+                var distResults = await _distCache.GetAsync(cacheKey);
+                if (distResults == null)
+                {
+                    Thread.Sleep(5000);  // simulates heavy query
+                    var productsToSerialize = await _ctx.Products
+                        .Where(p => p.Category == category || category == "all")
+                        .Include(p => p.Rating).ToListAsync();
+
+                    var serialized = JsonSerializer.Serialize(productsToSerialize,
+                        CacheSourceGenerationContext.Default.ListProduct);
+
+                    await _distCache.SetAsync(cacheKey, Encoding.UTF8.GetBytes(serialized),
+                        new DistributedCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                        });
+                    return productsToSerialize;
+                }
+
+                var results = JsonSerializer.Deserialize(Encoding.UTF8.GetString(distResults),
+                    CacheSourceGenerationContext.Default.ListProduct);
+
+                return results ?? new List<Product>();
+
             } 
             catch (Exception ex)
             {
@@ -73,6 +112,20 @@ namespace CarvedRock.Data
                 id, timer.ElapsedTicks);           
 
             return product;
-        }       
+        }
+
+        public async Task<Product> AddNewProductAsync(Product product, bool invalidateCache)
+        {
+            _ctx.Products.Add(product);
+            await _ctx.SaveChangesAsync();
+
+            if (invalidateCache)
+            {
+                var cacheKey = $"products_{product.Category}";
+                await _distCache.RemoveAsync(cacheKey);
+            }
+
+            return product;
+        }
     }
 }

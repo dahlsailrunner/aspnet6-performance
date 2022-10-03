@@ -8,4 +8,5 @@ public interface IProductLogic
     Task<ProductModel?> GetProductByIdAsync(int id);
     IEnumerable<ProductModel> GetProductsForCategory(string category);
     ProductModel? GetProductById(int id);
+    Task<ProductModel> AddNewProductAsync(ProductModel productToAdd, bool invalidateCache);
 }
