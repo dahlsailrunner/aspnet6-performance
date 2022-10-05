@@ -53,8 +53,7 @@ public partial class ListingModel : PageModel
             //    new JsonSerializerOptions(defaults:JsonSerializerDefaults.Web));  // System.Text.Json
 
             //Products = await response.Content.ReadFromJsonAsync<List<ProductModel>>();  // System.Text.Json helper
-            Products = JsonSerializer.Deserialize(jsonContent, SourceGenerationContext.Default.ListProductModel);
-            
+            Products = JsonSerializer.Deserialize(jsonContent, ProductModelGenerationContext.Default.ListProductModel);
 
             if (Products != null && Products.Any())
             {

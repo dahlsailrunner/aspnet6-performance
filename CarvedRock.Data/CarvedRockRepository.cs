@@ -30,16 +30,16 @@ namespace CarvedRock.Data
         public async Task<List<Product>> GetProductsAsync(string category)
         {            
             _logger.LogInformation("Getting products in repository for {category}", category);
-            if (category == "clothing")
-            {
-                var ex = new ApplicationException("Database error occurred!!");
-                ex.Data.Add("Category", category);
-                throw ex;
-            }
-            if (category == "equip")
-            {
-                throw new SqliteException("Simulated fatal database error occurred!", 551);
-            }
+            //if (category == "kayak")
+            //{
+            //    var ex = new ApplicationException("Database error occurred!!");
+            //    ex.Data.Add("Category", category);
+            //    throw ex;
+            //}
+            //if (category == "equip")
+            //{
+            //    throw new SqliteException("Simulated fatal database error occurred!", 551);
+            //}
 
             try
             {
@@ -55,6 +55,7 @@ namespace CarvedRock.Data
                 //}
 
                 var distResults = await _distCache.GetAsync(cacheKey);
+
                 if (distResults == null)
                 {
                     Thread.Sleep(5000);  // simulates heavy query
@@ -70,14 +71,13 @@ namespace CarvedRock.Data
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
                         });
+
                     return productsToSerialize;
                 }
-
                 var results = JsonSerializer.Deserialize(Encoding.UTF8.GetString(distResults),
                     CacheSourceGenerationContext.Default.ListProduct);
 
                 return results ?? new List<Product>();
-
             } 
             catch (Exception ex)
             {

@@ -16,6 +16,6 @@ public class ProductModel
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(List<ProductModel>))]
-public partial class SourceGenerationContext : JsonSerializerContext
+public partial class ProductModelGenerationContext : JsonSerializerContext
 {
 }

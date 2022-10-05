@@ -1,11 +1,13 @@
 using CarvedRock.Core;
 using CarvedRock.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarvedRock.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[AllowAnonymous]
 public partial class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
@@ -19,6 +21,7 @@ public partial class ProductController : ControllerBase
     }
 
     [HttpGet]
+    [ResponseCache(Duration = 90, VaryByQueryKeys = new [] { "category" })]
     public async Task<IEnumerable<ProductModel>> Get(string category = "all")
     {
         using (_logger.BeginScope("ScopeCat: {ScopeCat}", category))

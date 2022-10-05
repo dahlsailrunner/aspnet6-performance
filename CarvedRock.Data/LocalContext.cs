@@ -71,6 +71,24 @@ namespace CarvedRock.Data
                     "Get up and down rocky terrain like a billy-goat with these awesome high-top boots with outstanding support.",
                 ImgUrl = "/images/shutterstock_475046062.jpg"
             });
+            Products.Add(new Product
+            {
+                Name = "Sherpa",
+                Category = "equip",
+                Price = 129.99,
+                Description =
+                    "Manage and carry your gear with ease using this backpack with great lumbar support.",
+                ImgUrl = "/images/shutterstock_6170527.jpg"
+            });
+            Products.Add(new Product
+            {
+                Name = "Glide",
+                Category = "kayak",
+                Price = 399.99,
+                Description =
+                    "Navigate tricky waterways easily with this great and manageable kayak.",
+                ImgUrl = "/images/shutterstock_645036007.jpg"
+            });
 
             SaveChanges();
         }
