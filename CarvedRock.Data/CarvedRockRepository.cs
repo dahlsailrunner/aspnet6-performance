@@ -58,7 +58,7 @@ namespace CarvedRock.Data
 
                 if (distResults == null)
                 {
-                    Thread.Sleep(5000);  // simulates heavy query
+                    await Task.Delay(5000);  // simulates heavy query
                     var productsToSerialize = await _ctx.Products
                         .Where(p => p.Category == category || category == "all")
                         .Include(p => p.Rating).ToListAsync();
@@ -94,6 +94,7 @@ namespace CarvedRock.Data
 
         public List<Product> GetProducts(string category)
         {
+            Thread.Sleep(5000);
             return _ctx.Products.Where(p => p.Category == category || category == "all").ToList();
         }
 

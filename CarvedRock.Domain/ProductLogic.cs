@@ -10,25 +10,40 @@ public class ProductLogic : IProductLogic
 {
     private readonly ILogger<ProductLogic> _logger;
     private readonly ICarvedRockRepository _repo;
-    public ProductLogic(ILogger<ProductLogic> logger, ICarvedRockRepository repo)
+    private readonly IExtraLogic _extraLogic;
+
+    public ProductLogic(ILogger<ProductLogic> logger, ICarvedRockRepository repo, IExtraLogic extraLogic)
     {
         _logger = logger;
         _repo = repo;
+        _extraLogic = extraLogic;
     }
     public async Task<IEnumerable<ProductModel>> GetProductsForCategoryAsync(string category)
     {               
         _logger.LogInformation("Getting products in logic for {category}", category);
 
         Activity.Current?.AddEvent(new ActivityEvent("Getting products from repository"));
+
         var products = await _repo.GetProductsAsync(category);
+        
+        _logger.LogInformation("ABOUT TO MAKE EXTRA ASYNC CALLS");
+        // TWO NEW SEQUENTIAL ASYNC CALLS HERE
+        var inventory = await _extraLogic.GetInventoryForProductsAsync(
+            products.Select(p => p.Id).ToList());
+        _logger.LogInformation("finished getting {count} inventory records", inventory.Count);
+
+        var promotion = await _extraLogic.GetPromotionForProductsAsync(
+            products.Select(p => p.Id).ToList());
+        _logger.LogInformation("got promotion for product id {id}", promotion?.ProductId);
 
         var results = new List<ProductModel>();
+        // TODO: merge inventory and promotion results into product models
         foreach (var product in products)
         {
             var productToAdd = ConvertToProductModel(product);
             results.Add(productToAdd);
         }
-
+        
         Activity.Current?.AddEvent(new ActivityEvent("Retrieved products from repository"));
 
         return results;
