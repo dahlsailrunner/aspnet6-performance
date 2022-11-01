@@ -27,7 +27,7 @@ namespace CarvedRock.Data
             _distCache = distCache;
             _factoryLogger = loggerFactory.CreateLogger("DataAccessLayer");
         }
-        public async Task<List<Product>> GetProductsAsync(string category)
+        public async Task<List<Product>> GetProductsAsync(CancellationToken cancelToken, string category)
         {            
             _logger.LogInformation("Getting products in repository for {category}", category);
             //if (category == "kayak")
@@ -54,14 +54,14 @@ namespace CarvedRock.Data
                 //    _memoryCache.Set(cacheKey, results, TimeSpan.FromMinutes(2));
                 //}
 
-                var distResults = await _distCache.GetAsync(cacheKey);
+                var distResults = await _distCache.GetAsync(cacheKey, cancelToken);
 
                 if (distResults == null)
                 {
-                    await Task.Delay(5000);  // simulates heavy query
+                    await Task.Delay(5000, cancelToken);  // simulates heavy query
                     var productsToSerialize = await _ctx.Products
                         .Where(p => p.Category == category || category == "all")
-                        .Include(p => p.Rating).ToListAsync();
+                        .Include(p => p.Rating).ToListAsync(cancelToken);
 
                     var serialized = JsonSerializer.Serialize(productsToSerialize,
                         CacheSourceGenerationContext.Default.ListProduct);
@@ -70,7 +70,7 @@ namespace CarvedRock.Data
                         new DistributedCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-                        });
+                        }, cancelToken);
 
                     return productsToSerialize;
                 }
@@ -92,10 +92,11 @@ namespace CarvedRock.Data
             return await _ctx.Products.FindAsync(id);
         }
 
-        public List<Product> GetProducts(string category)
+        public async Task<List<Product>> GetProductListAsync(string category)
         {
-            Thread.Sleep(5000);
-            return _ctx.Products.Where(p => p.Category == category || category == "all").ToList();
+            Thread.Sleep(5000);  // simulates heavy query
+            return await _ctx.Products.Where(p => p.Category == category || category == "all")
+                .ToListAsync();
         }
 
         public Product? GetProductById(int id)

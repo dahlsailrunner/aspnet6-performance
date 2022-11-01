@@ -18,22 +18,34 @@ public class ProductLogic : IProductLogic
         _repo = repo;
         _extraLogic = extraLogic;
     }
-    public async Task<IEnumerable<ProductModel>> GetProductsForCategoryAsync(string category)
+    public async Task<IEnumerable<ProductModel>> GetProductsForCategoryAsync(CancellationToken cancelToken, 
+        string category)
     {               
         _logger.LogInformation("Getting products in logic for {category}", category);
 
         Activity.Current?.AddEvent(new ActivityEvent("Getting products from repository"));
 
-        var products = await _repo.GetProductsAsync(category);
+        var products = await _repo.GetProductsAsync(cancelToken, category);
         
         _logger.LogInformation("ABOUT TO MAKE EXTRA ASYNC CALLS");
         // TWO NEW SEQUENTIAL ASYNC CALLS HERE
-        var inventory = await _extraLogic.GetInventoryForProductsAsync(
-            products.Select(p => p.Id).ToList());
-        _logger.LogInformation("finished getting {count} inventory records", inventory.Count);
+        //var inventory = await _extraLogic.GetInventoryForProductsAsync(
+        //    products.Select(p => p.Id).ToList());
+        //_logger.LogInformation("finished getting {count} inventory records", inventory.Count);
 
-        var promotion = await _extraLogic.GetPromotionForProductsAsync(
-            products.Select(p => p.Id).ToList());
+        //var promotion = await _extraLogic.GetPromotionForProductsAsync(
+        //    products.Select(p => p.Id).ToList());
+        //_logger.LogInformation("got promotion for product id {id}", promotion?.ProductId);
+
+        var invTask = _extraLogic.GetInventoryForProductsAsync(
+                products.Select(p => p.Id).ToList(), cancelToken);
+        var promotionTask = _extraLogic.GetPromotionForProductsAsync(
+                products.Select(p => p.Id).ToList(), cancelToken);
+        await Task.WhenAll(invTask, promotionTask);
+
+        var inventory = await invTask;
+        _logger.LogInformation("finished getting {count} inventory records", inventory.Count);
+        var promotion = await promotionTask;
         _logger.LogInformation("got promotion for product id {id}", promotion?.ProductId);
 
         var results = new List<ProductModel>();
@@ -55,9 +67,9 @@ public class ProductLogic : IProductLogic
         return product != null ? ConvertToProductModel(product) : null;
     }
 
-    public IEnumerable<ProductModel> GetProductsForCategory(string category)
+    public async Task<IEnumerable<ProductModel>> GetProductListForCategoryAsync(string category)
     {
-        var products =  _repo.GetProducts(category);
+        var products =  await _repo.GetProductListAsync(category);
 
         var results = new List<ProductModel>();
         foreach (var product in products)

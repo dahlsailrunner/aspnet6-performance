@@ -22,12 +22,12 @@ public partial class ProductController : ControllerBase
 
     [HttpGet]
     //[ResponseCache(Duration = 90, VaryByQueryKeys = new [] { "category" })]
-    public async Task<IEnumerable<ProductModel>> Get(string category = "all")
+    public async Task<IEnumerable<ProductModel>> Get(CancellationToken cancelToken, string category = "all")
     {
         using (_logger.BeginScope("ScopeCat: {ScopeCat}", category))
         {     
             _logger.LogInformation( "Getting products in API.");
-            return await _productLogic.GetProductsForCategoryAsync(category);
+            return await _productLogic.GetProductsForCategoryAsync(cancelToken, category);
         }
     }
 

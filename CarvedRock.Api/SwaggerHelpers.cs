@@ -69,5 +69,6 @@ public class SwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         return client.GetDiscoveryDocumentAsync(authority)
             .GetAwaiter()
             .GetResult();
+
     }
 }

@@ -6,9 +6,10 @@ public class ExtraLogic : IExtraLogic
 {
     private readonly List<int> _locationIds = new() { 1, 5, 7, 9 };
 
-    public Task<List<LocationInventory>> GetInventoryForProductsAsync(List<int> productIds)
+    public async Task<List<LocationInventory>> GetInventoryForProductsAsync(List<int> productIds,
+        CancellationToken cancelToken)
     {
-        Thread.Sleep(5000); // heavy remote operation
+        await Task.Delay(5000, cancelToken); // heavy remote operation
         var inventory = new List<LocationInventory>();
         foreach (var productId in productIds)
         {
@@ -24,25 +25,26 @@ public class ExtraLogic : IExtraLogic
             }
         }
         
-        return Task.FromResult(inventory);
+        return inventory;
     }
 
-    public Task<Promotion?> GetPromotionForProductsAsync(List<int> productIds)
+    public async Task<Promotion?> GetPromotionForProductsAsync(List<int> productIds,
+        CancellationToken cancelToken)
     {
-        Thread.Sleep(5000); // heavy remote operation
+        await Task.Delay(5000, cancelToken); // heavy remote operation
         var rand = new Random();
         var productIndexForPromotion = rand.Next(-1, productIds.Count);
 
         if (productIndexForPromotion >= 0)
         {
-            return Task.FromResult<Promotion?>(new Promotion
+            return new Promotion
             {
                 ProductId = productIds[productIndexForPromotion],
                 Description = "Get 'em while they're hot!!",
                 Discount = 0.15
-            });
+            };
         }
 
-        return Task.FromResult<Promotion?>(null);
+        return null;
     }
 }
