@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+
 namespace CarvedRock.Api;
 public class UserScopeMiddleware
 {

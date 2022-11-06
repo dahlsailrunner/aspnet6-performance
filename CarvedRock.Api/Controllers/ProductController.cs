@@ -7,7 +7,6 @@ namespace CarvedRock.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[AllowAnonymous]
 public partial class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;

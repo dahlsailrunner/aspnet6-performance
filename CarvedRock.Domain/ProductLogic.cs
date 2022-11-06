@@ -11,12 +11,15 @@ public class ProductLogic : IProductLogic
     private readonly ILogger<ProductLogic> _logger;
     private readonly ICarvedRockRepository _repo;
     private readonly IExtraLogic _extraLogic;
+    private readonly IApiCaller _apiCaller;
 
-    public ProductLogic(ILogger<ProductLogic> logger, ICarvedRockRepository repo, IExtraLogic extraLogic)
+    public ProductLogic(ILogger<ProductLogic> logger, ICarvedRockRepository repo, IExtraLogic extraLogic,
+        IApiCaller apiCaller)
     {
         _logger = logger;
         _repo = repo;
         _extraLogic = extraLogic;
+        _apiCaller = apiCaller;
     }
     public async Task<IEnumerable<ProductModel>> GetProductsForCategoryAsync(CancellationToken cancelToken, 
         string category)
@@ -26,6 +29,8 @@ public class ProductLogic : IProductLogic
         Activity.Current?.AddEvent(new ActivityEvent("Getting products from repository"));
 
         var products = await _repo.GetProductsAsync(cancelToken, category);
+
+        var apiResults = await _apiCaller.CallExternalApiAsync();
         
         _logger.LogInformation("ABOUT TO MAKE EXTRA ASYNC CALLS");
         // TWO NEW SEQUENTIAL ASYNC CALLS HERE

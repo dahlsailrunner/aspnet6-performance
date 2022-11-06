@@ -14,4 +14,13 @@
         public string Description { get; set; }
         public double Discount { get; set; }
     }
+
+    public class LocalClaim
+    {
+        public string Type { get; set; }
+        public string Value { get; set; }
+
+        public override string ToString() => $"{Type} : {Value}";
+    }
+
 }

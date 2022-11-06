@@ -23,6 +23,7 @@ public partial class ListingModel : PageModel
         _httpCtx = httpContextAccessor.HttpContext;
     }
 
+
     public List<ProductModel>? Products { get; set; }
     public string CategoryName { get; set; } = "";
 
@@ -40,8 +41,6 @@ public partial class ListingModel : PageModel
             var accessToken = await _httpCtx.GetTokenAsync("access_token");
             _apiClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", accessToken);
-            // for a better way to include and manage access tokens for API calls:
-            // https://identitymodel.readthedocs.io/en/latest/aspnetcore/web.html
         }
 
         var response = await _apiClient.GetAsync($"Product?category={cat}");

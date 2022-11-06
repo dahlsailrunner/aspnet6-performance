@@ -43,7 +43,8 @@ builder.Services.AddAuthentication(options =>
     };    
     options.SaveTokens = true;
 });
-builder.Services.AddHttpContextAccessor();
+
+//builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();

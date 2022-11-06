@@ -48,7 +48,10 @@ builder.Services.AddAuthentication("Bearer")
         {
             NameClaimType = "email"
         };
+        options.SaveToken = true;
     });
+
+builder.Services.AddOpenIdConnectAccessTokenManagement();
 
 builder.Services.AddResponseCaching();
 builder.Services.AddMemoryCache();
@@ -66,6 +69,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductLogic, ProductLogic>();
 builder.Services.AddScoped<IExtraLogic, ExtraLogic>();
+builder.Services.AddScoped<IApiCaller, ApiCaller>();
+
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDbContext<LocalContext>();
 builder.Services.AddScoped<ICarvedRockRepository, CarvedRockRepository>();
 
