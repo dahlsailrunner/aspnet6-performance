@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
 using CarvedRock.WebApp;
 using Serilog;
@@ -11,9 +12,11 @@ builder.Logging.ClearProviders();
 builder.Host.UseSerilog((context, loggerConfig) => { 
     loggerConfig
     .ReadFrom.Configuration(context.Configuration)
+    .Enrich.WithProperty("Application", Assembly.GetExecutingAssembly().GetName().Name ?? "UI")
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .Enrich.With<ActivityEnricher>()
+    .WriteTo.Seq("http://localhost:5341")
     .WriteTo.Console()
     .WriteTo.Debug();
 });

@@ -9,7 +9,7 @@ public class ExtraLogic : IExtraLogic
     public async Task<List<LocationInventory>> GetInventoryForProductsAsync(List<int> productIds,
         CancellationToken cancelToken)
     {
-        await Task.Delay(5000, cancelToken); // heavy remote operation
+        await Task.Delay(200, cancelToken); // heavy remote operation
         var inventory = new List<LocationInventory>();
         foreach (var productId in productIds)
         {
@@ -31,7 +31,7 @@ public class ExtraLogic : IExtraLogic
     public async Task<Promotion?> GetPromotionForProductsAsync(List<int> productIds,
         CancellationToken cancelToken)
     {
-        await Task.Delay(5000, cancelToken); // heavy remote operation
+        await Task.Delay(100, cancelToken); // heavy remote operation
         var rand = new Random();
         var productIndexForPromotion = rand.Next(-1, productIds.Count);
 

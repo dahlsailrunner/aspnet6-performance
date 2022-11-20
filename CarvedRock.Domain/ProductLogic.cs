@@ -89,6 +89,20 @@ public class ProductLogic : IProductLogic
         return results;
     }
 
+    public IEnumerable<ProductModel> GetProductListForCategory(string category)
+    {
+        var products = _repo.GetProductList(category);
+
+        var results = new List<ProductModel>();
+        foreach (var product in products)
+        {
+            var productToAdd = ConvertToProductModel(product);
+            results.Add(productToAdd);
+        }
+
+        return results;
+    }
+
     public ProductModel? GetProductById(int id)
     {
         var product = _repo.GetProductById(id);

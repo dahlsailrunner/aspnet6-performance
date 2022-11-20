@@ -21,12 +21,12 @@ public class SyncProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ProductModel>> Get(string category = "all")
+    public IEnumerable<ProductModel> Get(string category = "all")
     {
         using (_logger.BeginScope("ScopeCat: {ScopeCat}", category))
         {     
             _logger.LogInformation( "Getting products in API.");
-            return await _productLogic.GetProductListForCategoryAsync(category);
+            return _productLogic.GetProductListForCategory(category);
         }
     }
 }
