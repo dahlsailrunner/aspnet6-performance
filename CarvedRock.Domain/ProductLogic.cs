@@ -42,10 +42,13 @@ public class ProductLogic : IProductLogic
         //    products.Select(p => p.Id).ToList());
         //_logger.LogInformation("got promotion for product id {id}", promotion?.ProductId);
 
+        // instead of using HttpContext in parallel tasks - grab what you need 
+        // here and pass as arg(s) -- like the path or an access token or whatever
         var invTask = _extraLogic.GetInventoryForProductsAsync(
                 products.Select(p => p.Id).ToList(), cancelToken);
         var promotionTask = _extraLogic.GetPromotionForProductsAsync(
                 products.Select(p => p.Id).ToList(), cancelToken);
+
         await Task.WhenAll(invTask, promotionTask);
 
         var inventory = await invTask;

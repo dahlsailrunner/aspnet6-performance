@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CarvedRock.WebApp.Pages;
@@ -6,12 +7,21 @@ namespace CarvedRock.WebApp.Pages;
 [AllowAnonymous]
 public class GetInTouchModel : PageModel
 {
+    [BindProperty]
+    public string Content { get; set; }
+
     public void OnGet()
     {
     }
 
-    public void OnPost()
+    public async Task OnPostAsync()
     {
+        var bestContent = Content;
+        var form = await Request.ReadFormAsync();
+
+        var betterContent = form["content"];
+        var betterEmail = form["emailaddress"];
+
         var content = Request.Form["content"];
         var emailAddress = Request.Form["emailaddress"];
         

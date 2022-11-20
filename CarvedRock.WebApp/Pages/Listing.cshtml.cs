@@ -8,21 +8,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CarvedRock.WebApp.Pages;
 
-public partial class ListingModel : PageModel
+public class ListingModel : PageModel
 {
     private readonly HttpClient _apiClient;
     private readonly ILogger<ListingModel> _logger;
-    private readonly HttpContext? _httpCtx;
 
-    public ListingModel(HttpClient apiClient, ILogger<ListingModel> logger,
-        IHttpContextAccessor httpContextAccessor)
+    public ListingModel(IHttpClientFactory factory, ILogger<ListingModel> logger)
     {
         _logger = logger;
-        _apiClient = apiClient;
-        _apiClient.BaseAddress = new Uri("https://localhost:7213");
-        _httpCtx = httpContextAccessor.HttpContext;
+        _apiClient = factory.CreateClient("backend");
     }
-
 
     public List<ProductModel>? Products { get; set; }
     public string CategoryName { get; set; } = "";
@@ -36,12 +31,10 @@ public partial class ListingModel : PageModel
             throw new Exception("failed");
         }
 
-        if (_httpCtx != null)
-        {
-            var accessToken = await _httpCtx.GetTokenAsync("access_token");
-            _apiClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", accessToken);
-        }
+        // handled in the named client configuration in Programs.cs
+        //var accessToken = await HttpContext.GetTokenAsync("access_token");
+        //_apiClient.DefaultRequestHeaders.Authorization =
+        //        new AuthenticationHeaderValue("Bearer", accessToken);
 
         var response = await _apiClient.GetAsync($"Product?category={cat}");
         if (response.IsSuccessStatusCode)

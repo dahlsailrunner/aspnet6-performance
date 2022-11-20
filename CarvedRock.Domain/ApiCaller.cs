@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using CarvedRock.Core;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
@@ -8,25 +9,29 @@ namespace CarvedRock.Domain;
 
 public class ApiCaller : IApiCaller
 {
-    private HttpContext _httpContext;
+    private readonly HttpClient _httpClient;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ApiCaller(IHttpContextAccessor httpContextAccessor)
+    public ApiCaller(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
     {
-        _httpContext = httpContextAccessor.HttpContext;
+        _httpClient = httpClient;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<List<LocalClaim>?> CallExternalApiAsync()
     {
-        using (var httpCli = new HttpClient { BaseAddress = new Uri("https://demo.duendesoftware.com/api/") })
+        if (_httpContextAccessor.HttpContext == null)
         {
-            var token = await _httpContext.GetTokenAsync("access_token");
-            httpCli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var response = await httpCli.GetAsync("test");
-            response.EnsureSuccessStatusCode();
-
-            var claims = await response.Content.ReadFromJsonAsync<List<LocalClaim>>();
-            return claims;
+            throw new Exception("Can't get access token.");
         }
+
+        var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+        _httpClient.SetBearerToken(token);
+
+        var response = await _httpClient.GetAsync("test");
+        response.EnsureSuccessStatusCode();
+
+        var claims = await response.Content.ReadFromJsonAsync<List<LocalClaim>>();
+        return claims;
     }
 }

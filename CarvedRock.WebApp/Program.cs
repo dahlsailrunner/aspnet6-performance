@@ -43,11 +43,15 @@ builder.Services.AddAuthentication(options =>
     };    
     options.SaveTokens = true;
 });
+builder.Services.AddOpenIdConnectAccessTokenManagement();
 
 //builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddRazorPages();
-builder.Services.AddHttpClient();
+builder.Services.AddUserAccessTokenHttpClient("backend", configureClient: client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7213");
+});
 
 var app = builder.Build();
 
