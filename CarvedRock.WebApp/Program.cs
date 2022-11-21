@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using CarvedRock.Core;
 using Microsoft.IdentityModel.Tokens;
-using CarvedRock.WebApp;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Enrichers.Span;

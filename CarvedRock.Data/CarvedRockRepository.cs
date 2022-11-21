@@ -62,6 +62,7 @@ public class CarvedRockRepository : ICarvedRockRepository
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
                     }, cancelToken);
 
+                
                 return productsToSerialize;
             }
 

@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Enrichers.Span;
 using Serilog.Exceptions;
 using System.Reflection;
+using CarvedRock.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();

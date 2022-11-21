@@ -13,7 +13,6 @@
   <ItemGroup>
     <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.11" />
-    
     <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="6.0.2" />
 
     <!-- Serilog -->
@@ -21,8 +20,8 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />    
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
     <PackageReference Include="Serilog.Enrichers.Span" Version="3.0.0" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
 
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
