@@ -65,6 +65,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseMiddleware<UserScopeMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseAuthorization();
 app.MapRazorPages().RequireAuthorization();
 

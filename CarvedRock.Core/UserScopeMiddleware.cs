@@ -20,7 +20,8 @@ public class UserScopeMiddleware
         {
             var user = context.User;
 
-            var subjectId = user.Claims.First(c=> c.Type == "sub")?.Value;
+            var subjectId = user.Claims
+                .FirstOrDefault(c=> c.Type == "sub" || c.Type == "client_id")?.Value;
                         
             using (_logger.BeginScope("User:{user}, SubjectId:{subject}", 
                        user.Identity.Name, subjectId))

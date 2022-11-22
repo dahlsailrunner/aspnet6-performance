@@ -48,6 +48,9 @@ public class CarvedRockRepository : ICarvedRockRepository
 
             if (distResults == null)
             {
+                var timer = new Stopwatch();
+                timer.Start();
+
                 await Task.Delay(500, cancelToken); // simulates heavy query
                 var productsToSerialize = await _ctx.Products
                     .Where(p => p.Category == category || category == "all")
@@ -62,7 +65,9 @@ public class CarvedRockRepository : ICarvedRockRepository
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
                     }, cancelToken);
 
-                
+                timer.Stop();
+                _logger.LogInformation("Database and caching took {ElapsedMs} milliseconds",
+                    timer.ElapsedMilliseconds);
                 return productsToSerialize;
             }
 

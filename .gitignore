@@ -2,3 +2,9 @@
 **/.vs/**
 **/bin
 **/obj
+/CarvedRock.Benchmarking/BenchmarkDotNet.Artifacts
+/CarvedRock.LoadTest/reports
+/CarvedRock.Api/tmp.txt
+/CarvedRock.JMeter/reports
+/CarvedRock.JMeter/jmeter.log
+/CarvedRock.JMeter/results.xml

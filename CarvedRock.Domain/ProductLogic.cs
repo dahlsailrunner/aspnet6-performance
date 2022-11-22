@@ -30,7 +30,8 @@ public class ProductLogic : IProductLogic
 
         var products = await _repo.GetProductsAsync(cancelToken, category);
 
-        var apiResults = await _apiCaller.CallExternalApiAsync();
+        // REMOVED FOR LOAD TESTS
+        //var apiResults = await _apiCaller.CallExternalApiAsync();
         
         _logger.LogInformation("ABOUT TO MAKE EXTRA ASYNC CALLS");
         // TWO NEW SEQUENTIAL ASYNC CALLS HERE

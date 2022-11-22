@@ -31,3 +31,16 @@ docker run -d --name seq --restart unless-stopped -e ACCEPT_EULA=Y -p 5341:80 da
 ```
 
 The NuGet package used for this is [Serilog.Sinks.Seq](https://www.nuget.org/packages/Serilog.Sinks.Seq)
+
+## JMeter
+
+An example of load testing with [JMeter](https://jmeter.apache.org/) was shown and the artifacts are in the `jmeter` directory.
+
+To install JMeter:
+
+1. You need **Java** installed.  Get it from here: [https://www.java.com/en/download/](https://www.java.com/en/download/)
+1. Get the latest zipped version of JMeter from here (*if you're on Windows make sure to get the `zip` version!*): [https://jmeter.apache.org/download_jmeter.cgi](https://jmeter.apache.org/download_jmeter.cgi)
+1. Once you've extracted the zip file contents, run `jmeter.bat` from the `bin` directory
+
+**Pro Tip:** Add the `bin` directory mentioned above to your `PATH` environment variable. Feel free to put directory
+anywhere you see fit.

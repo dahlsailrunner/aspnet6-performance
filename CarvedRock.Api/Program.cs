@@ -108,6 +108,7 @@ app.UseResponseCaching();
 app.MapFallback(() => Results.Redirect("/swagger"));
 app.UseAuthentication();
 app.UseMiddleware<UserScopeMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 
