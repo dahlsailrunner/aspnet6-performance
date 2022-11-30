@@ -1,4 +1,9 @@
 /* HEADER */
+/* ---------------------------------------------
+    This is lots of information about how and 
+    why we structured the header this 
+    way......
+---------------------------------------------  */
 .header-nav--nav {border: 0; border-bottom: 1px solid #a0a0a0; margin-bottom: 0;}
 
 .header-nav--nav .header-nav--main ul {margin: 10px 0 10px;}

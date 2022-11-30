@@ -6,7 +6,7 @@ namespace CarvedRock.LoadTest;
 internal class Program
 {
     private const string BaseUrl = "https://localhost:7213";
-    private static readonly IFeed<string> ApiParams = Feed.CreateRandom("categories", 
+    private static readonly IFeed<string> ApiParams = Feed.CreateRandom("categories",
         new List<string> { "all", "boots", "equip", "kayak" });
 
     static void Main(string[] args)
@@ -77,17 +77,17 @@ internal class Program
                     ? Response.Ok(statusCode: (int)response.StatusCode)
                     : Response.Fail(statusCode: (int)response.StatusCode);
             },
-            timeout: TimeSpan.FromSeconds(10));
+            timeout: TimeSpan.FromSeconds(15));
 
         var syncScenario = ScenarioBuilder
             .CreateScenario("sync_products", syncStep)
             .WithWarmUpDuration(TimeSpan.FromSeconds(5))
             .WithLoadSimulations(
-                Simulation.InjectPerSec(rate: 200, during: TimeSpan.FromSeconds(30)));
+                Simulation.RampPerSec(rate: 100, during: TimeSpan.FromSeconds(30)));
 
         NBomberRunner
             .RegisterScenarios(  // comment out scenarios you don't want to run below
-                //getProductsScenario,
+                                 //getProductsScenario,
                 syncScenario
                 //asyncScenario
                 )

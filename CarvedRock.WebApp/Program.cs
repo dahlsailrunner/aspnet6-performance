@@ -56,10 +56,22 @@ builder.Services.AddUserAccessTokenHttpClient("backend", configureClient: client
     client.BaseAddress = new Uri("https://localhost:7213");
 });
 
+builder.Services.AddWebOptimizer(pipeline =>
+{
+    pipeline.AddCssBundle("/css/bundled.css", "/css/main.css", "/css/custom.css");
+});
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
+
 var app = builder.Build();
 
 app.UseExceptionHandler("/Error");
 
+app.UseWebOptimizer();
+app.UseResponseCompression();
 app.UseStaticFiles();
 
 app.UseRouting();
