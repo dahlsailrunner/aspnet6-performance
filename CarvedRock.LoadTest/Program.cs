@@ -87,9 +87,9 @@ internal class Program
 
         NBomberRunner
             .RegisterScenarios(  // comment out scenarios you don't want to run below
-                                 //getProductsScenario,
-                syncScenario
-                //asyncScenario
+                getProductsScenario,
+                //syncScenario
+                asyncScenario
                 )
             .Run();
     }

@@ -26,6 +26,8 @@ public class ProductLogic : IProductLogic
     {               
         _logger.LogInformation("Getting products in logic for {category}", category);
 
+        var bigString = new string('o', 1000 * 1024);
+
         Activity.Current?.AddEvent(new ActivityEvent("Getting products from repository"));
 
         var products = await _repo.GetProductsAsync(cancelToken, category);

@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using CarvedRock.Core;
 using Microsoft.AspNetCore.Authentication;
@@ -24,6 +23,7 @@ public class ListingModel : PageModel
 
     public async Task OnGetAsync()
     {
+        var bigString = new string('o', 5000 * 1024);
         _logger.LogInformation("Making API call to get products...");
         var cat = Request.Query["cat"].ToString();
         if (string.IsNullOrEmpty(cat))

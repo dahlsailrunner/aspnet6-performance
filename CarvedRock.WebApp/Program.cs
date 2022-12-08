@@ -58,7 +58,9 @@ builder.Services.AddUserAccessTokenHttpClient("backend", configureClient: client
 
 builder.Services.AddWebOptimizer(pipeline =>
 {
-    pipeline.AddCssBundle("/css/bundled.css", "/css/main.css", "/css/custom.css");
+    pipeline.AddCssBundle("/css/bundled.css",
+        "/css/main.css",
+        "/css/custom.css");
 });
 
 builder.Services.AddResponseCompression(options =>
@@ -70,8 +72,8 @@ var app = builder.Build();
 
 app.UseExceptionHandler("/Error");
 
+//app.UseResponseCompression();
 app.UseWebOptimizer();
-app.UseResponseCompression();
 app.UseStaticFiles();
 
 app.UseRouting();
