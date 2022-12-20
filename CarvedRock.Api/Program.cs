@@ -61,12 +61,17 @@ builder.Services.AddHttpClient<IApiCaller, ApiCaller>(client =>
 });
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddResponseCaching();
+//builder.Services.AddResponseCaching();
 builder.Services.AddMemoryCache();
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
     options.InstanceName = "CarvedRock";
+});
+
+builder.Services.AddOutputCache(opts =>
+{
+    opts.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(5)));
 });
 
 builder.Services.AddControllers();
@@ -110,7 +115,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseResponseCompression();
-app.UseResponseCaching();
+//app.UseResponseCaching();
+app.UseOutputCache();
 app.MapFallback(() => Results.Redirect("/swagger"));
 app.UseAuthentication();
 app.UseMiddleware<UserScopeMiddleware>();

@@ -2,6 +2,7 @@
 using CarvedRock.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CarvedRock.Api.Controllers;
 
@@ -21,6 +22,7 @@ public class AsyncProductController : ControllerBase
     }
 
     [HttpGet]
+    [OutputCache]
     public async Task<IEnumerable<ProductModel>> Get(string category = "all")
     {
         using (_logger.BeginScope("ScopeCat: {ScopeCat}", category))
