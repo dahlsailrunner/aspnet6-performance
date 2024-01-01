@@ -2,15 +2,20 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Duende.AccessTokenManagement" Version="1.0.0" />
-    <PackageReference Include="NBomber" Version="3.3.0" />
-    <PackageReference Include="NBomber.Http" Version="3.0.3" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Duende.AccessTokenManagement" Version="2.0.3" />
+    <PackageReference Include="NBomber" Version="5.4.1" />
+    <PackageReference Include="NBomber.Data" Version="5.0.0" />
+    <PackageReference Include="NBomber.Http" Version="5.0.1" />
   </ItemGroup>
 
 </Project>
