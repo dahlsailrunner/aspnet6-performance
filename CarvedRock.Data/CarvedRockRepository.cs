@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using CarvedRock.Data.Entities;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -89,11 +90,20 @@ public class CarvedRockRepository : ICarvedRockRepository
         return await _ctx.Products.FindAsync(id);
     }
 
+    [DapperAot]
     public async Task<List<Product>> GetProductListAsync(string category)
     {
-        await Task.Delay(5000); // simulates heavy query
-        return await _ctx.Products.Where(p => p.Category == category || category == "all")
-            .ToListAsync();
+        //await Task.Delay(5000); // simulates heavy query
+        if (string.Equals(category, "error", StringComparison.InvariantCultureIgnoreCase))
+            throw new Exception("Something bad happened");
+
+        var db = _ctx.Database.GetDbConnection();
+        return (await db.QueryAsync<Product>(
+            "SELECT * FROM Products WHERE Category = @category OR @category = 'all'", 
+            new { category })).ToList();
+
+        //return await _ctx.Products.Where(p => p.Category == category || category == "all")
+        //    .ToListAsync();
     }
 
     public List<Product> GetProductList(string category)

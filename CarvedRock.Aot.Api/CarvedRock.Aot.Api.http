@@ -1,0 +1,38 @@
+@CarvedRock.Aot.Api_HostAddress = http://localhost:5000
+
+POST https://demo.duendesoftware.com/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=m2m&client_secret=secret&grant_type=client_credentials&scope=api
+
+###
+
+@access_token = eyJhbGciOiJSUzI1NiIsImtpZCI6IkMyNTJGOUNBQjc3Q0MxNTQwNTBFMTg1NTk5MjJCMTJGIiwidHlwIjoiYXQrand0In0.eyJpc3MiOiJodHRwczovL2RlbW8uZHVlbmRlc29mdHdhcmUuY29tIiwibmJmIjoxNzA0MjE1MTMwLCJpYXQiOjE3MDQyMTUxMzAsImV4cCI6MTcwNDIxODczMCwiYXVkIjoiYXBpIiwic2NvcGUiOlsiYXBpIl0sImNsaWVudF9pZCI6Im0ybSIsImp0aSI6IkIyRTNGNjZEQUYwN0U1MUM3Rjk4RjAyMEJCMkRDMEY3In0.mqCeCVgpMTpwDGHrdpBiPtCPsy6epx2fHIH21Pq3pcmHaRKvm3J7IhuHH-Oax-RTmAkggNh-bTC9L87cBaphAld9DWQ1iiI1TxWU--cDUI9tNkDiZCRBuSFRZIg-iEocVy0YtEixD8yipP5tBIaVAVgmT-kFn-Y0dVj36AqlLjeV3gpnjRKMif32cnn70YyC26dQePnqe7EU9XUZO27c1nPsCcALUyz75Ywjcfl_3DK51Rdp41XB-XZU1QFbJJ1rqaDLCKIA2rHTN9r-KyJTrKB8f-HxbdsSigKBFSLvxN05sU94KPGRB0qSInHBU_NQZmsDGTO0U_Oc1BtOTJZTeA
+
+GET {{CarvedRock.Aot.Api_HostAddress}}/products
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+###
+
+GET {{CarvedRock.Aot.Api_HostAddress}}/products?category=equip
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+###
+
+## this request will fail with 500 error (throws exception)
+GET {{CarvedRock.Aot.Api_HostAddress}}/products?category=error
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+###
+GET {{CarvedRock.Aot.Api_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{CarvedRock.Aot.Api_HostAddress}}/todos/1
+Accept: application/json
+
+###

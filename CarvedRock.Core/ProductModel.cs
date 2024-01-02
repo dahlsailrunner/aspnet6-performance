@@ -14,7 +14,7 @@ public class ProductModel
     public int NumberOfRatings { get; set; }
 }
 
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(List<ProductModel>))]
 public partial class ProductModelGenerationContext : JsonSerializerContext
 {

@@ -1,4 +1,5 @@
-﻿using CarvedRock.Data.Entities;
+﻿using CarvedRock.Data.CompiledModels;
+using CarvedRock.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +13,12 @@ namespace CarvedRock.Data
         public string DbPath { get; set; }
 
         public LocalContext()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            DbPath = Path.Join(path, "carvedrock-logging.db");
+        }
+
+        public LocalContext(DbContextOptions<LocalContext> options) : base(options)
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             DbPath = Path.Join(path, "carvedrock-logging.db");
