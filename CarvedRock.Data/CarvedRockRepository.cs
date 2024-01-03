@@ -99,7 +99,7 @@ public class CarvedRockRepository : ICarvedRockRepository
 
         var db = _ctx.Database.GetDbConnection();
         return (await db.QueryAsync<Product>(
-            "SELECT * FROM Products WHERE Category = @category OR @category = 'all'", 
+            "SELECT * FROM Products WHERE Category = @category OR @category = 'all'",
             new { category })).ToList();
 
         //return await _ctx.Products.Where(p => p.Category == category || category == "all")

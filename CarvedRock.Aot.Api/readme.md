@@ -35,7 +35,9 @@ work with Native AOT. Dynamic queries (like `ctx.Products.FindAsync(id)`) are no
 
 By switching to Dapper.AOT, I was able to get the API to work with Native AOT (from `dotnet publish`).
   
-The API still works within Visual Studio with EF Core, just not at runtime from `dotnet publish`.
+The API still works within Visual Studio with EF Core, just not at runtime from `dotnet publish`.  Even using a
+SQL query like `ctx.Products.FromSql("SELECT * FROM Products WHERE category = {category} or {category} = 'all'")`
+does not work.
 
 ## "Desktop Development with C++" Workload is Required
 
