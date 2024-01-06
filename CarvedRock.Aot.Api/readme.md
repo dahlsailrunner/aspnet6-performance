@@ -10,7 +10,7 @@ error (could not resolve ObjectResponseFormatter).
 - Needed to add a [compiled model](https://learn.microsoft.com/en-us/ef/core/performance/advanced-performance-topics?tabs=with-di%2Cexpression-api-with-constant#compiled-models)
 to the EF core context. I did this by running the following command in the `CarvedRock.Data` project folder:
 `dotnet ef dbcontext optimize`.
-- Needed to add a constructor to the `LocalContext that takes a `DbContextOptions` parameter.
+- Needed to add a constructor to the `LocalContext` that takes a `DbContextOptions` parameter.
 - Pivoted to Dapper.AOT (see notes below) for the query.
 
 You cannot to `RemoveRange` on a `DbSet` -- that gives a "model building is not supported" error.
