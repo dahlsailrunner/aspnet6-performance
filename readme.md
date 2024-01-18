@@ -1,6 +1,8 @@
-# ASP.NET Core 6 Performance
+# ASP.NET Core 6 (and 8!) Performance
 
-This is the repository with the code associated with an upcoming Pluralsight course called "ASP.NET Core 6 Performance".
+> **NOTE:** This repo has an updated branch for .NET 8 -- it's the `net8-updates` branch.
+
+This is the repository with the code associated with a Pluralsight course called "ASP.NET Core Performance".
 
 Repo URL: [https://github.com/dahlsailrunner/aspnet6-performance](https://github.com/dahlsailrunner/aspnet6-performance)
 
